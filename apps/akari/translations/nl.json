@@ -177,6 +177,8 @@
       "posts": "Berichten {{count}}",
       "followers": "Volgers {{count}}",
       "following": "Volgend {{count}}",
+      "blocking": "U blokkeert {{count}}",
+      "blocked": "Geblokkeerd door {{count}}",
       "videos": "Video's",
       "feeds": "Feeds",
       "starterpacks": "Starterpacks",
@@ -204,7 +206,8 @@
       "profileUpdateError": "Profiel kon niet worden bijgewerkt",
       "handleHistory": "Handle-geschiedenis",
       "noHandleHistory": "Geen handle-geschiedenis",
-      "noHandleHistoryDescription": "Deze gebruiker heeft zijn handle nog niet gewijzigd."
+      "noHandleHistoryDescription": "Deze gebruiker heeft zijn handle nog niet gewijzigd.",
+      "blockStatsUnavailable": "Kan blokkeerdata niet laden"
     },
     "feed": {
       "loadingMorePosts": "Meer berichten laden...",

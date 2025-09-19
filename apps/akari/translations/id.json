@@ -177,6 +177,8 @@
       "posts": "Postingan {{count}}",
       "followers": "Pengikut {{count}}",
       "following": "Mengikuti {{count}}",
+      "blocking": "Memblokir {{count}}",
+      "blocked": "Diblokir oleh {{count}}",
       "videos": "Video",
       "feeds": "Feed",
       "starterpacks": "Starterpacks",
@@ -204,7 +206,8 @@
       "profileUpdateError": "Gagal memperbarui profil",
       "handleHistory": "Riwayat handle",
       "noHandleHistory": "Tidak ada riwayat handle",
-      "noHandleHistoryDescription": "Pengguna ini belum pernah mengganti handle-nya."
+      "noHandleHistoryDescription": "Pengguna ini belum pernah mengganti handle-nya.",
+      "blockStatsUnavailable": "Tidak dapat memuat data blokir"
     },
     "feed": {
       "loadingMorePosts": "Memuat lebih banyak postingan...",

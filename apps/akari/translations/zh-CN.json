@@ -177,6 +177,8 @@
       "posts": "帖子 {{count}}",
       "followers": "关注者 {{count}}",
       "following": "关注 {{count}}",
+      "blocking": "您屏蔽的 {{count}}",
+      "blocked": "屏蔽您的 {{count}}",
       "videos": "视频",
       "feeds": "信息流",
       "starterpacks": "入门包",
@@ -204,7 +206,8 @@
       "profileUpdateError": "更新个人资料失败",
       "handleHistory": "用户名历史记录",
       "noHandleHistory": "暂无用户名历史记录",
-      "noHandleHistoryDescription": "该用户尚未更改过用户名。"
+      "noHandleHistoryDescription": "该用户尚未更改过用户名。",
+      "blockStatsUnavailable": "无法加载屏蔽数据"
     },
     "feed": {
       "loadingMorePosts": "加载更多帖子...",

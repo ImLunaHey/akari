@@ -183,6 +183,8 @@
       "posts": "Publications {{count}}",
       "followers": "Abonnés {{count}}",
       "following": "Abonnements {{count}}",
+      "blocking": "Comptes bloqués {{count}}",
+      "blocked": "Comptes qui vous bloquent {{count}}",
       "youHaveBlockedUser": "Vous avez bloqué cet utilisateur",
       "mutualBlock": "Vous vous êtes mutuellement bloqués",
       "copyLink": "Copier le lien",
@@ -204,7 +206,8 @@
       "profileUpdateError": "Échec de la mise à jour du profil",
       "handleHistory": "Historique du handle",
       "noHandleHistory": "Aucun historique de handle",
-      "noHandleHistoryDescription": "Cet utilisateur n'a pas encore changé de handle."
+      "noHandleHistoryDescription": "Cet utilisateur n'a pas encore changé de handle.",
+      "blockStatsUnavailable": "Impossible de charger les données de blocage"
     },
     "feed": {
       "loadingMorePosts": "Chargement de plus de publications...",

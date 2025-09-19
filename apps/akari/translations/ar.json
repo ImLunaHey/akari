@@ -177,6 +177,8 @@
       "posts": "المنشورات {{count}}",
       "followers": "المتابعون {{count}}",
       "following": "المتابَعون {{count}}",
+      "blocking": "الحسابات المحظورة {{count}}",
+      "blocked": "حسابات تحظرك {{count}}",
       "videos": "فيديوهات",
       "feeds": "التدفقات",
       "starterpacks": "حزم البداية",
@@ -204,7 +206,8 @@
       "profileUpdateError": "فشل في تحديث الملف الشخصي",
       "handleHistory": "سجل المعرف",
       "noHandleHistory": "لا يوجد سجل للمعرف",
-      "noHandleHistoryDescription": "لم يغيّر هذا المستخدم معرفه بعد."
+      "noHandleHistoryDescription": "لم يغيّر هذا المستخدم معرفه بعد.",
+      "blockStatsUnavailable": "تعذر تحميل بيانات الحظر"
     },
     "feed": {
       "loadingMorePosts": "جاري تحميل المزيد من المنشورات...",

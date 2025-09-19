@@ -177,6 +177,8 @@
       "posts": "Посты {{count}}",
       "followers": "Подписчики {{count}}",
       "following": "Подписки {{count}}",
+      "blocking": "Блокируете {{count}}",
+      "blocked": "Вас блокируют {{count}}",
       "videos": "Видео",
       "feeds": "Ленты",
       "starterpacks": "Стартерпаки",
@@ -204,7 +206,8 @@
       "profileUpdateError": "Не удалось обновить профиль",
       "handleHistory": "История хэндла",
       "noHandleHistory": "Нет истории хэндла",
-      "noHandleHistoryDescription": "Этот пользователь ещё не менял свой хэндл."
+      "noHandleHistoryDescription": "Этот пользователь ещё не менял свой хэндл.",
+      "blockStatsUnavailable": "Не удалось загрузить данные блокировок"
     },
     "feed": {
       "loadingMorePosts": "Загрузка дополнительных постов...",

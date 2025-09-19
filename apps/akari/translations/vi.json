@@ -177,6 +177,8 @@
       "posts": "Bài viết {{count}}",
       "followers": "Người theo dõi {{count}}",
       "following": "Đang theo dõi {{count}}",
+      "blocking": "Đang chặn {{count}}",
+      "blocked": "Bị chặn bởi {{count}}",
       "videos": "Video",
       "feeds": "Nguồn cấp",
       "starterpacks": "Gói khởi đầu",
@@ -204,7 +206,8 @@
       "profileUpdateError": "Cập nhật hồ sơ thất bại",
       "handleHistory": "Lịch sử tên định danh",
       "noHandleHistory": "Chưa có lịch sử tên định danh",
-      "noHandleHistoryDescription": "Người dùng này chưa từng đổi tên định danh."
+      "noHandleHistoryDescription": "Người dùng này chưa từng đổi tên định danh.",
+      "blockStatsUnavailable": "Không thể tải dữ liệu chặn"
     },
     "feed": {
       "loadingMorePosts": "Đang tải thêm bài đăng...",

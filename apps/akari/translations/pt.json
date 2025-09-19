@@ -177,6 +177,8 @@
       "posts": "Publicações {{count}}",
       "followers": "Seguidores {{count}}",
       "following": "Seguindo {{count}}",
+      "blocking": "Bloqueando {{count}}",
+      "blocked": "Bloqueado por {{count}}",
       "videos": "Vídeos",
       "feeds": "Feeds",
       "starterpacks": "Starterpacks",
@@ -204,7 +206,8 @@
       "profileUpdateError": "Erro ao atualizar perfil",
       "handleHistory": "Histórico do identificador",
       "noHandleHistory": "Nenhum histórico do identificador",
-      "noHandleHistoryDescription": "Este usuário ainda não alterou o identificador."
+      "noHandleHistoryDescription": "Este usuário ainda não alterou o identificador.",
+      "blockStatsUnavailable": "Não foi possível carregar os dados de bloqueio"
     },
     "feed": {
       "loadingMorePosts": "Carregando mais publicações...",

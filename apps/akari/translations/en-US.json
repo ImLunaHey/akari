@@ -177,6 +177,8 @@
       "posts": "Posts {{count}}",
       "followers": "Followers {{count}}",
       "following": "Following {{count}}",
+      "blocking": "Blocking {{count}}",
+      "blocked": "Blocked {{count}}",
       "videos": "Videos",
       "feeds": "Feeds",
       "starterpacks": "Starterpacks",
@@ -204,7 +206,8 @@
       "profileUpdateError": "Failed to update profile",
       "handleHistory": "Handle History",
       "noHandleHistory": "No handle history",
-      "noHandleHistoryDescription": "This user hasn't changed their handle yet."
+      "noHandleHistoryDescription": "This user hasn't changed their handle yet.",
+      "blockStatsUnavailable": "Unable to load block data"
     },
     "feed": {
       "loadingMorePosts": "Loading more posts...",

@@ -16,6 +16,7 @@ import { useFollowUser } from '@/hooks/mutations/useFollowUser';
 import { useUpdateProfile } from '@/hooks/mutations/useUpdateProfile';
 import { useBorderColor } from '@/hooks/useBorderColor';
 import { useTranslation } from '@/hooks/useTranslation';
+import { useProfileBlocks } from '@/hooks/useProfileBlocks';
 import { showAlert } from '@/utils/alert';
 
 type ProfileHeaderProps = {
@@ -72,10 +73,40 @@ export function ProfileHeader({ profile, isOwnProfile = false, onDropdownToggle,
   const followMutation = useFollowUser();
   const blockMutation = useBlockUser();
   const updateProfileMutation = useUpdateProfile();
+  const identifier = profile.did ?? profile.handle;
+  const {
+    data: blockTotals,
+    isError: isBlockTotalsError,
+  } = useProfileBlocks(identifier);
 
   const isFollowing = !!profile.viewer?.following;
   const isBlocking = !!profile.viewer?.blocking;
   const isBlockedBy = profile.viewer?.blockedBy;
+
+  const statsSegments = [
+    t('profile.posts', {
+      count: formatNumber(profile.postsCount || 0, currentLocale),
+    }),
+    t('profile.followers', {
+      count: formatNumber(profile.followersCount || 0, currentLocale),
+    }),
+    t('profile.following', {
+      count: formatNumber(profile.followsCount || 0, currentLocale),
+    }),
+  ];
+
+  if (blockTotals && !isBlockTotalsError) {
+    statsSegments.push(
+      t('profile.blocking', {
+        count: formatNumber(blockTotals.blocking, currentLocale),
+      }),
+      t('profile.blocked', {
+        count: formatNumber(blockTotals.blocked, currentLocale),
+      }),
+    );
+  }
+
+  const statsText = statsSegments.join(' • ');
 
   const handleFollow = async () => {
     if (!profile.did) return;
@@ -337,19 +368,10 @@ export function ProfileHeader({ profile, isOwnProfile = false, onDropdownToggle,
 
         {/* Stats */}
         <View style={styles.statsContainer}>
-          <ThemedText style={styles.statText}>
-            {t('profile.posts', {
-              count: formatNumber(profile.postsCount || 0, currentLocale),
-            })}{' '}
-            •{' '}
-            {t('profile.followers', {
-              count: formatNumber(profile.followersCount || 0, currentLocale),
-            })}{' '}
-            •{' '}
-            {t('profile.following', {
-              count: formatNumber(profile.followsCount || 0, currentLocale),
-            })}
-          </ThemedText>
+          <ThemedText style={styles.statText}>{statsText}</ThemedText>
+          {isBlockTotalsError ? (
+            <ThemedText style={styles.blockStatsMessage}>{t('profile.blockStatsUnavailable')}</ThemedText>
+          ) : null}
         </View>
 
         {/* Description */}
@@ -525,12 +547,14 @@ const styles = StyleSheet.create({
   statsContainer: {
     marginBottom: 12,
   },
+  blockStatsMessage: {
+    fontSize: 14,
+    opacity: 0.7,
+    marginTop: 4,
+  },
   statText: {
     fontSize: 15,
     lineHeight: 20,
-  },
-  statNumber: {
-    fontWeight: 'bold',
   },
   description: {
     fontSize: 14,
