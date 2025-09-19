@@ -1,5 +1,21 @@
 # Changelog
 
+## [1.2.0](https://github.com/ImLunaHey/akari/compare/v1.1.0...v1.2.0) (2025-09-19)
+
+
+### Features
+
+* add pending chats view to messages ([#202](https://github.com/ImLunaHey/akari/issues/202)) ([b1ed410](https://github.com/ImLunaHey/akari/commit/b1ed41056cd953dd167f660dfd335a3840133cb0))
+* add toast notifications for profile link actions ([#205](https://github.com/ImLunaHey/akari/issues/205)) ([7bc9615](https://github.com/ImLunaHey/akari/commit/7bc961599f9c2ab2f2006fd0e17b975a9b63d133))
+* bookmarks page ([#192](https://github.com/ImLunaHey/akari/issues/192)) ([90b8154](https://github.com/ImLunaHey/akari/commit/90b8154982e8319398f1804ab4ce93de4dfbbad0))
+* support expo app variants ([#196](https://github.com/ImLunaHey/akari/issues/196)) ([5518a03](https://github.com/ImLunaHey/akari/commit/5518a037a4ad4c98625752f97a93a1291221465b))
+
+
+### Bug Fixes
+
+* square panel corners ([#198](https://github.com/ImLunaHey/akari/issues/198)) ([721e7fe](https://github.com/ImLunaHey/akari/commit/721e7fe3ef47a52c8832e06701efa37898bf6b0d))
+* submit auth form with enter key ([#203](https://github.com/ImLunaHey/akari/issues/203)) ([16ba99c](https://github.com/ImLunaHey/akari/commit/16ba99c5623527f24eb3c368aebd24223f030361))
+
 ## [1.1.0](https://github.com/ImLunaHey/akari/compare/v1.0.0...v1.1.0) (2025-09-18)
 
 
