@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.3.1](https://github.com/lucid-softworks/akari/compare/v1.3.0...v1.3.1) (2025-10-04)
+
+
+### Bug Fixes
+
+* expo updates ([61df383](https://github.com/lucid-softworks/akari/commit/61df383ec64a0fdb06a9fe347a55b446edcb3f13))
+* stretch feed tab bar to full width ([#325](https://github.com/lucid-softworks/akari/issues/325)) ([cab19be](https://github.com/lucid-softworks/akari/commit/cab19be7f69368a43ddbea06069042a5ac1219d5))
+
 ## [1.3.0](https://github.com/ImLunaHey/akari/compare/v1.2.2...v1.3.0) (2025-10-03)
 
 
