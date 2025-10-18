@@ -1,8 +1,8 @@
 import { Image } from 'expo-image';
 import { useLocalSearchParams } from 'expo-router';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Keyboard, KeyboardAvoidingView, Platform, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
-import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { BlueskyEmbed } from '@/bluesky-api';
 import { ExternalEmbed } from '@/components/ExternalEmbed';
@@ -13,7 +13,7 @@ import { ThemedView } from '@/components/ThemedView';
 import { VideoEmbed } from '@/components/VideoEmbed';
 import { YouTubeEmbed } from '@/components/YouTubeEmbed';
 import { IconSymbol } from '@/components/ui/IconSymbol';
-import { VirtualizedList } from '@/components/ui/VirtualizedList';
+import { VirtualizedList, VirtualizedListHandle } from '@/components/ui/VirtualizedList';
 import { useSendMessage } from '@/hooks/mutations/useSendMessage';
 import { useConversations } from '@/hooks/queries/useConversations';
 import { useMessages } from '@/hooks/queries/useMessages';
@@ -236,9 +236,15 @@ export default function ConversationScreen() {
   const { handle } = useLocalSearchParams<{ handle: string }>();
   const [messageText, setMessageText] = useState('');
   const [isKeyboardOpen, setIsKeyboardOpen] = useState(false);
+  const listRef = useRef<VirtualizedListHandle<Message>>(null);
+  const previousMessageCountRef = useRef(0);
+  const previousFirstMessageIdRef = useRef<string | null>(null);
+  const hasPerformedInitialScrollRef = useRef(false);
+  const isPrependingRef = useRef(false);
+  const scrollOffsetRef = useRef(0);
+  const contentHeightRef = useRef(0);
   const [imageDimensions, setImageDimensions] = useState<Record<string, { width: number; height: number }>>({});
   const borderColor = useBorderColor();
-  const insets = useSafeAreaInsets();
   const { t } = useTranslation();
   const navigateToProfile = useNavigateToProfile();
 
@@ -277,6 +283,87 @@ export default function ConversationScreen() {
     hasNextPage,
     isFetchingNextPage,
   } = useMessages(conversation?.convoId, 50);
+
+  const messages = useMemo(() => {
+    const flattenedMessages = messagesData?.pages.flatMap((page) => page.messages) ?? [];
+
+    return flattenedMessages.slice().sort((firstMessage, secondMessage) => {
+      const firstSentAt = new Date(firstMessage.sentAt).getTime();
+      const secondSentAt = new Date(secondMessage.sentAt).getTime();
+
+      return firstSentAt - secondSentAt;
+    });
+  }, [messagesData]);
+
+  useEffect(() => {
+    if (messagesLoading) {
+      return;
+    }
+
+    const previousCount = previousMessageCountRef.current;
+    const currentFirstMessageId = messages[0]?.id ?? null;
+
+    if (messages.length === 0) {
+      previousMessageCountRef.current = 0;
+      previousFirstMessageIdRef.current = null;
+      hasPerformedInitialScrollRef.current = false;
+      isPrependingRef.current = false;
+      scrollOffsetRef.current = 0;
+      contentHeightRef.current = 0;
+      return;
+    }
+
+    if (!hasPerformedInitialScrollRef.current) {
+      listRef.current?.scrollToEnd({ animated: false });
+      hasPerformedInitialScrollRef.current = true;
+    }
+
+    const isPrepending =
+      previousFirstMessageIdRef.current !== null &&
+      currentFirstMessageId !== null &&
+      currentFirstMessageId !== previousFirstMessageIdRef.current &&
+      messages.length > previousCount;
+
+    if (!isPrepending) {
+      previousMessageCountRef.current = messages.length;
+      previousFirstMessageIdRef.current = currentFirstMessageId;
+      return;
+    }
+
+    previousMessageCountRef.current = messages.length;
+    previousFirstMessageIdRef.current = currentFirstMessageId;
+    isPrependingRef.current = true;
+  }, [messages, messagesLoading]);
+
+  useEffect(() => {
+    previousMessageCountRef.current = 0;
+    previousFirstMessageIdRef.current = null;
+    hasPerformedInitialScrollRef.current = false;
+    isPrependingRef.current = false;
+    scrollOffsetRef.current = 0;
+    contentHeightRef.current = 0;
+  }, [conversation?.convoId]);
+
+  const handleScroll = useCallback((event: { nativeEvent: { contentOffset: { y: number } } }) => {
+    scrollOffsetRef.current = event.nativeEvent.contentOffset.y;
+  }, []);
+
+  const handleContentSizeChange = useCallback((_: number, height: number) => {
+    if (isPrependingRef.current) {
+      const heightDelta = height - contentHeightRef.current;
+
+      if (heightDelta > 0) {
+        listRef.current?.scrollToOffset({
+          offset: scrollOffsetRef.current + heightDelta,
+          animated: false,
+        });
+      }
+
+      isPrependingRef.current = false;
+    }
+
+    contentHeightRef.current = height;
+  }, []);
 
   // Send message mutation
   const sendMessageMutation = useSendMessage();
@@ -354,7 +441,7 @@ export default function ConversationScreen() {
         text: messageText.trim(),
       });
       setMessageText('');
-    } catch (error) {
+    } catch {
       showAlert({
         title: t('common.error'),
         message: t('messages.errorSendingMessage'),
@@ -428,7 +515,7 @@ export default function ConversationScreen() {
   // Show loading state while finding conversation
   if (!conversation) {
     return (
-      <SafeAreaView style={styles.container}>
+      <SafeAreaView style={styles.container} edges={['left', 'right']}>
         <ThemedView style={styles.container}>
           <ThemedView style={[styles.header, { borderBottomColor: borderColor }]}>
             <ThemedView style={styles.headerInfo}>
@@ -450,7 +537,7 @@ export default function ConversationScreen() {
     const messageError = messagesError as MessageError;
 
     return (
-      <SafeAreaView style={styles.container}>
+      <SafeAreaView style={styles.container} edges={['left', 'right']}>
         <ThemedView style={styles.container}>
           <ThemedView style={[styles.header, { borderBottomColor: borderColor }]}>
             <ThemedView style={styles.headerInfo}>
@@ -468,11 +555,8 @@ export default function ConversationScreen() {
     );
   }
 
-  // Flatten all pages of messages into a single array
-  const messages = messagesData?.pages.flatMap((page) => page.messages) || [];
-
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={styles.container} edges={['left', 'right']}>
       <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
         <ThemedView style={styles.container}>
           {/* Header */}
@@ -502,15 +586,19 @@ export default function ConversationScreen() {
             </ThemedView>
           ) : (
             <VirtualizedList
+              ref={listRef}
               data={messages}
               renderItem={renderMessage}
               keyExtractor={(item) => item.id}
+              style={styles.list}
               contentContainerStyle={styles.messagesContent}
               showsVerticalScrollIndicator={false}
-              onEndReached={handleLoadMore}
-              onEndReachedThreshold={0.2}
+              onStartReached={handleLoadMore}
+              onStartReachedThreshold={0.2}
               ListFooterComponent={renderFooter}
-              inverted={true} // Show newest messages at the bottom
+              onScroll={handleScroll}
+              onContentSizeChange={handleContentSizeChange}
+              scrollEventThrottle={16}
               estimatedItemSize={ESTIMATED_MESSAGE_HEIGHT}
             />
           )}
@@ -521,7 +609,7 @@ export default function ConversationScreen() {
               styles.inputContainer,
               {
                 borderTopColor: borderColor,
-                paddingBottom: Platform.OS === 'ios' && !isKeyboardOpen ? insets.bottom + 35 : 12,
+                paddingBottom: isKeyboardOpen ? 12 : 8,
               },
             ]}
           >
@@ -566,6 +654,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
+  list: {
+    flex: 1,
+  },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -596,10 +687,11 @@ const styles = StyleSheet.create({
     opacity: 0.6,
   },
   messagesContent: {
-    paddingVertical: 16,
+    paddingTop: 0,
+    paddingBottom: 0,
   },
   messageContainer: {
-    marginHorizontal: 16,
+    marginHorizontal: 12,
     marginVertical: 4,
   },
   myMessage: {
@@ -658,7 +750,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'flex-end',
     paddingHorizontal: 16,
-    paddingVertical: 12,
+    paddingTop: 12,
     borderTopWidth: 0.5,
   },
   textInput: {
